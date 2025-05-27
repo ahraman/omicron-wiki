@@ -13,3 +13,8 @@ tokio = { version = "1.45.1", features = [
     "net",
     "fs",
 ] }
+axum = { version = "0.8.4", default-features = false, features = [
+    "macros",
+    "tokio",
+    "http1",
+] }
