@@ -6,3 +6,4 @@ edition.workspace = true
 rust-version.workspace = true
 
 [dependencies]
+dotenvy = "0.15.7"
