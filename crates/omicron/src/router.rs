@@ -1,12 +1,8 @@
 use std::sync::Arc;
 
-use axum::{
-    Router, debug_handler,
-    response::{IntoResponse, Response},
-    routing::get,
-};
+use axum::{Router, routing::get};
 
-use crate::{App, AppState, Error};
+use crate::{App, AppState};
 
 pub fn build_router(app: Arc<App>) -> Router {
     let state = AppState(app);
@@ -14,10 +10,15 @@ pub fn build_router(app: Arc<App>) -> Router {
 }
 
 fn build_root_router() -> Router<AppState> {
-    Router::new().route("/", get(root))
+    use crate::controllers::root;
+    Router::new()
+        .route("/", get(root))
+        .nest("/w", build_wiki_router())
 }
 
-#[debug_handler(state = AppState)]
-async fn root(AppState(_): AppState) -> Result<Response, Error> {
-    Ok("hello, world!".into_response())
+fn build_wiki_router() -> Router<AppState> {
+    use crate::controllers::wiki::{page, root};
+    Router::new()
+        .route("/", get(root))
+        .route("/page", get(page::get))
 }

@@ -2,6 +2,16 @@
 
 ## v0.1.0
 
+### Site structure
+
+#### HTTP method handlers
+* The following routes have been added:
+    * `/`, `/w`: redirects to `/w/page?title=main`.
+    * `/w/page`: primary interface for encyclopedia pages.
+        * Interface via query parameters, via one of the following formats:
+            * If query parameter `title` is present, then it presents the content of that page.
+            * If none of the above options are applicable, it redirects to `/w/page?title=main`.
+
 ### API changes
 
 #### Crate `omicron`
@@ -10,6 +20,11 @@
     * Private types `App`, `AppState`, and `Config` from `mod omicron::app`.
     * Private type `Error` from `mod omicron::error`.
     * Private fn `build_router` from `mod omicron::router`.
+
+##### `mod omicron::controllers`
+* Created module.
+* Contains the method handlers for all of the differing URLs on a given website.
+* The hierarchy roughly corresponds to site structure; see there for the corresponding info.
 
 ##### `mod omicron::app`
 * Created private module.

@@ -1,4 +1,5 @@
 mod app;
+pub mod controllers;
 mod error;
 mod router;
 
