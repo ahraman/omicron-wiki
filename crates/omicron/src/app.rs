@@ -1,5 +1,7 @@
 use std::{ops::Deref, sync::Arc};
 
+use axum::extract::{FromRequestParts, State};
+
 use crate::Error;
 
 pub struct Config {
@@ -24,7 +26,8 @@ impl App {
     }
 }
 
-#[derive(Clone)]
+#[derive(Clone, FromRequestParts)]
+#[from_request(via(State))]
 pub struct AppState(pub Arc<App>);
 
 impl Deref for AppState {

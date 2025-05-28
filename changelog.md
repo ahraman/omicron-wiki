@@ -7,8 +7,9 @@
 #### Crate `omicron`
 * Created library crate.
 * Added re-exports of the following:
-    * Private types `struct App`, `struct AppState`, `struct Config` from `mod omicron::app`.
-    * Private type `enum Error` from `mod omicron::error`.
+    * Private types `App`, `AppState`, and `Config` from `mod omicron::app`.
+    * Private type `Error` from `mod omicron::error`.
+    * Private fn `build_router` from `mod omicron::router`.
 
 ##### `mod omicron::app`
 * Created private module.
@@ -20,6 +21,9 @@
         * The main constructor, that uses a user-provided `config`.
 * Added type `struct AppState`.
     * Transparent wrapper over an `Arc<App>` instance.
+    * Used as an extractor for axum method handlers.
+        * To use, add `AppState(app): AppState` to the first argument of the respective method handler.
+        * For using `debug_handler` macro, replace the macro with `debug_handler(state = AppState)` to let the debugger know of the associated state type.
 * Added type `struct Config`.
     * Contains server configuration that is loaded from environment variables.
     * The content of this type are all read by `dotenvy` crate from a `.env` file at the workspace root.
@@ -38,6 +42,13 @@
     * Added the following variants to the enum:
         * Wrappers `Io(std::io::Error)`, `Env(std::env::VarError)`, and `Dotenvy(dotenvy::Error)`, of the respective error types.
     * Added `impl IntoResponse` trait implementation, so that it can be returned via a `Result` by axum method handlers.
+
+##### `mod omicron::router`
+* Created private module.
+* Provides the `build_router` function for building an axum router.
+* Added function `pub fn build_router(app: Arc<App>) -> Router`.
+    * Takes an `app` instance as input and constructs an axum `Router` instance with the provided app as the global state.
+    * For technical reasons, the app must be extracted in method handlers via the `AppState` extractor.
 
 ### Dependencies
 
