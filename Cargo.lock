@@ -315,6 +315,7 @@ dependencies = [
  "dotenvy",
  "thiserror",
  "tokio",
+ "tower",
 ]
 
 [[package]]

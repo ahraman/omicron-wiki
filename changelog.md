@@ -77,3 +77,4 @@
     * [`axum`](https://docs.rs/crate/axum/0.8.4) v0.8.4
         * disabled default features
         * enabled features: `macros`, `tokio`, `http1`, `query`
+    * [`tower`](https://docs.rs/crate/tower/0.5.2) v0.5.2
