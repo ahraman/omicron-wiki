@@ -18,4 +18,5 @@ axum = { version = "0.8.4", default-features = false, features = [
     "macros",
     "tokio",
     "http1",
+    "query",
 ] }

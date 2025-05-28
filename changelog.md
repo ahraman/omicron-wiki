@@ -61,4 +61,4 @@
         * enabled features: `rt-multi-thread`, `macros`, `net`, `fs`
     * [`axum`](https://docs.rs/crate/axum/0.8.4) v0.8.4
         * disabled default features
-        * enabled features: `macros`, `tokio`, `http1`
+        * enabled features: `macros`, `tokio`, `http1`, `query`
