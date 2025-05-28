@@ -2,6 +2,22 @@
 
 ## v0.1.0
 
+### API changes
+
+### Crate `omicron`
+* Created library crate.
+* Added re-exports of the following:
+    * Private type `enum omicron::error::Error`.
+
+#### `mod omicron::error`
+* Created private module.
+* Contains API related to the error type provided by `omicron` crate.
+* Added type `enum omicron::error::Error`.
+    * A generic error type for the whole crate.
+    * Added the following variants to the enum:
+        * Wrappers `Io(std::io::Error)`, `Env(std::env::VarError)`, and `Dotenvy(dotenvy::Error)`, of the respective error types.
+    * Added `impl IntoResponse` trait implementation, so that it can be returned via a `Result` by axum method handlers.
+
 ### Dependencies
 
 * Added the following crates as external dependencies to the workspace:
