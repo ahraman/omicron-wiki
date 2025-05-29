@@ -6,6 +6,7 @@ edition.workspace = true
 rust-version.workspace = true
 
 [dependencies]
+serde.workspace = true
 thiserror.workspace = true
 dotenvy = "0.15.7"
 tokio = { version = "1.45.1", features = [
