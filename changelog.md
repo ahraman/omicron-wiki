@@ -70,9 +70,10 @@
 * Added the following crates as external dependencies to the workspace:
     * [`serde`](https://docs.rs/crate/serde/1.0.219) v1.0.219
         * enabled features: `derive`
+    * [`serde_json`](https://docs.rs/crate/serde_json/1.0.140) v1.0.140
     * [`thiserror`](https://docs.rs/crate/thiserror/2.0.12) v2.0.12
 * Added the following crates as external dependencies to the crate `omicron`:
-    * inherited workspace dependencies: `serde`, `thiserror`
+    * inherited workspace dependencies: `serde`, `serde_json`, `thiserror`
     * [`dotenvy`](https://docs.rs/crate/dotenvy/0.15.7) v0.15.7
     * [`tokio`](https://docs.rs/crate/tokio/1.45.1) v1.45.1
         * enabled features: `rt-multi-thread`, `macros`, `net`, `fs`
