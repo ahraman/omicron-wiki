@@ -83,3 +83,4 @@
     * [`tower`](https://docs.rs/crate/tower/0.5.2) v0.5.2
     * [`tower-http`](https://docs.rs/crate/tower-http/0.6.4) v0.6.4
         * enabled features: `normalize-path`
+    * [`tera`](https://docs.rs/crate/tera/1.20.0) 1.20.0
