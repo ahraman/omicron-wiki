@@ -2,27 +2,37 @@ use std::{ops::Deref, sync::Arc};
 
 use axum::extract::{FromRequestParts, State};
 
-use crate::Error;
+use crate::{Error, render::RenderManager};
 
 pub struct Config {
     pub server_url: String,
+
+    pub assets_dir: String,
 }
 
 impl Config {
     pub fn from_env() -> Result<Self, Error> {
         Ok(Self {
             server_url: std::env::var("SERVER_URL")?,
+
+            assets_dir: std::env::var("ASSETS_DIR")?,
         })
     }
 }
 
 pub struct App {
     pub config: Config,
+
+    pub render: RenderManager,
 }
 
 impl App {
     pub fn new(config: Config) -> Result<Self, Error> {
-        Ok(Self { config })
+        Ok(Self {
+            render: RenderManager::new(&config)?,
+
+            config,
+        })
     }
 }
 

@@ -1,6 +1,7 @@
 mod app;
 pub mod controllers;
 mod error;
+pub mod render;
 mod router;
 
 pub use crate::{

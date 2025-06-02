@@ -1,13 +1,20 @@
+use std::path::PathBuf;
+
 use axum::response::{IntoResponse, Response};
 
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
+    #[error("invalid asset name {0}")]
+    AssetName(PathBuf),
+
     #[error(transparent)]
     Io(#[from] std::io::Error),
     #[error(transparent)]
     Env(#[from] std::env::VarError),
     #[error(transparent)]
     Dotenvy(#[from] dotenvy::Error),
+    #[error(transparent)]
+    Tera(#[from] tera::Error),
 }
 
 impl IntoResponse for Error {
