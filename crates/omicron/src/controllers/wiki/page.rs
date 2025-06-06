@@ -26,7 +26,7 @@ async fn view_page(
     title: String,
     _: HashMap<String, String>,
 ) -> Result<Response, Error> {
-    Ok(Html::from(app.render.render(
+    Ok(Html::from(app.render_manager.render(
         "base",
         json!({
             "site": {

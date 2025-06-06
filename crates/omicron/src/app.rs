@@ -23,13 +23,13 @@ impl Config {
 pub struct App {
     pub config: Config,
 
-    pub render: RenderManager,
+    pub render_manager: RenderManager,
 }
 
 impl App {
     pub fn new(config: Config) -> Result<Self, Error> {
         Ok(Self {
-            render: RenderManager::new(&config)?,
+            render_manager: RenderManager::new(&config)?,
 
             config,
         })
