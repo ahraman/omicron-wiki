@@ -11,10 +11,14 @@ pub enum Error {
     Io(#[from] std::io::Error),
     #[error(transparent)]
     Env(#[from] std::env::VarError),
+
     #[error(transparent)]
     Dotenvy(#[from] dotenvy::Error),
     #[error(transparent)]
     Tera(#[from] tera::Error),
+
+    #[error(transparent)]
+    Http(#[from] axum::http::Error),
 }
 
 impl IntoResponse for Error {

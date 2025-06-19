@@ -2,7 +2,7 @@ use std::sync::Arc;
 
 use axum::{Router, routing::get};
 
-use crate::{App, AppState};
+use crate::{App, AppState, controllers::asset};
 
 pub fn build_router(app: Arc<App>) -> Router {
     let state = AppState(app);
@@ -13,6 +13,7 @@ fn build_root_router() -> Router<AppState> {
     use crate::controllers::root;
     Router::new()
         .route("/", get(root))
+        .route("/asset", get(asset::get))
         .nest("/w", build_wiki_router())
 }
 

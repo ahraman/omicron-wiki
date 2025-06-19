@@ -1,3 +1,4 @@
+pub mod asset;
 pub mod wiki;
 
 use axum::{
