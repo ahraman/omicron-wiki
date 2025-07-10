@@ -11,6 +11,10 @@
         * Interface via query parameters, via one of the following formats:
             * If query parameter `title` is present, then it presents the content of that page.
             * If none of the above options are applicable, it redirects to `/w/page?title=main`.
+    * `/asset`: interface for loading web assets.
+        * Query parameters determine the functionality.
+            * If query parameter `file` is present, then the corresponding server-side file is loaded.
+            * Otherwise, status code `NOT_FOUND` is returned.
 
 ### API changes
 
@@ -32,8 +36,11 @@
     * Contains global app state and data.
     * Added field `pub config: Config`.
         * Contains app configuration, that are loaded from environment variables.
-    * Added method `pub fn new(config: Config) -> Result<Self, Error>`.
-        * The main constructor, that uses a user-provided `config`.
+    * Added field `pub asset_manager: omicron::asset::AssetManager`.
+        * The asset manager instance for this app.
+    * Added field `pub render_manager: omicron::asset::RenderManager`.
+        * The render manager instance for this app.
+    * Added constructor `pub fn new(config: Config) -> Result<Self, Error>`.
 * Added type `struct AppState`.
     * Transparent wrapper over an `Arc<App>` instance.
     * Used as an extractor for axum method handlers.
@@ -45,9 +52,50 @@
     * Added field `pub server_url: String`.
         * The URL of the server to listen on.
         * Set by the environment variable `SERVER_URL`.
-    * Added method `pub fn from_env() -> Result<Self, Error>`.
+    * Added constructor `pub fn from_env() -> Result<Self, Error>`.
         * Reads the content of the configuration file from the environment variables, as described by the respective field above.
         * Currently the most robust method of constructing this type.
+
+##### `mod omicron::asset`
+* Created public module.
+* Added type `struct Asset`.
+    * Added field `pub data: Box<[u8]>`.
+        * Contains the raw data of the asset.
+    * Added field `pub meta: AssetMeta`.
+        * The metadata of the asset, such as expected format and content type.
+* Added type `struct AssetMeta`.
+    * Added field `pub content_type: ContentType`.
+* Added type `enum ContentType`.
+    * Represents different HTML content types.
+* Added type `struct AssetManager`.
+    * Contains application state for assets.
+    * Added field `pub root_dir: PathBuf`.
+        * The root directory of `assets` folder, read from the app configuration.
+    * Added private field `cache: Cache`.
+        * The underlying asset cache.
+    * Added constructor `pub fn new(config: &Config) -> Result<Self, Error>`.
+    * Added method `pub fn load_transient(&self, key: &AssetKey) -> Result<Arc<Asset>, Error>`.
+        * Loads asset without putting it in cache.
+    * Added method `pub fn load(&self, key: AssetKey) -> Result<Arc<Asset>, Error>`.
+        * Loads asset from cache, or loads it from the server hard drive.
+    * Added method `pub fn reload(&mut self, key: AssetKey) -> Result<Arc<Asset>, Error>`.
+        * Loads asset from hard drive and replaces it in cache, even if it was already loaded.
+    * Added method `pub fn clear_cache(&mut self)`.
+        * Clears the internal cache from all loaded assets.
+* Added type `struct AssetKey`.
+    * Represents a key for indexing assets in the asset registry.
+    * Added field `pub path: String`.
+        * The name of the asset in the registry.
+    * Added constructor `pub fn new(path: String) -> Self`.
+
+#### `mod omicron::render`
+* Created public module.
+* Added type `struct RenderManager`.
+    * Contains application state for rendering HTML templates.
+    * Current backend used is the `tera` crate and template language.
+    * Added constructor `pub fn new(asset_manager: &AssetManager) -> Result<Self, Error>`.
+        * Main constructor, taking in the `asset_manager` instance of the current application.
+        * Loads templates in `${ASSET_DIR}/templates`.
 
 ##### `mod omicron::error`
 * Created private module.
@@ -55,7 +103,8 @@
 * Added type `enum Error`.
     * A generic error type for the whole crate.
     * Added the following variants to the enum:
-        * Wrappers `Io(std::io::Error)`, `Env(std::env::VarError)`, and `Dotenvy(dotenvy::Error)`, of the respective error types.
+        * `AssetName(PathBuf)`: error occurred during loading an asset pointed by the given path.
+        * Wrappers `Io(std::io::Error)`, `Env(std::env::VarError)`, `Dotenvy(dotenvy::Error)`, `Tera(tera::Error)`, and `Http(axum::http::Error)` of the respective error types.
     * Added `impl IntoResponse` trait implementation, so that it can be returned via a `Result` by axum method handlers.
 
 ##### `mod omicron::router`
