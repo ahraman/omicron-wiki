@@ -69,9 +69,11 @@ impl std::fmt::Display for ContentType {
             f,
             "{}",
             match self {
+                Self::Text => "text/plain",
                 Self::Css => "text/css",
+                Self::Html => "text/html",
                 Self::Javascript => "text/javascript",
-                _ => "application/octet-stream",
+                Self::Unknown => "application/octet-stream",
             }
         )
     }
