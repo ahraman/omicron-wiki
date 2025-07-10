@@ -3,19 +3,39 @@ use std::collections::HashMap;
 use axum::{
     debug_handler,
     extract::Query,
-    response::{IntoResponse, Redirect, Response},
+    response::{Html, IntoResponse, Redirect, Response},
 };
+use serde_json::json;
 
 use crate::{AppState, Error};
 
 #[debug_handler(state = AppState)]
 pub async fn get(
-    AppState(_): AppState,
-    Query(query): Query<HashMap<String, String>>,
+    app: AppState,
+    Query(mut query): Query<HashMap<String, String>>,
 ) -> Result<Response, Error> {
-    Ok(if let Some(title) = query.get("title") {
-        format!("you are at page `{title}`").into_response()
+    Ok(if let Some(title) = query.remove("title") {
+        view_page(app, title, query).await?
     } else {
         Redirect::to("/w/page?title=main").into_response()
     })
+}
+
+async fn view_page(
+    AppState(app): AppState,
+    title: String,
+    _: HashMap<String, String>,
+) -> Result<Response, Error> {
+    Ok(Html::from(app.render_manager.render(
+        "base",
+        json!({
+            "site": {
+                "title": "Omicron",
+            },
+            "page": {
+                "title": title,
+            }
+        }),
+    )?)
+    .into_response())
 }

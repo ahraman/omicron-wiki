@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    {% block head %}
+    <link rel="stylesheet" href="/asset?file=style/common.css">
+
+    <title>{{ page.title }} &ndash; {{ site.title }}</title>
+    {% endblock head %}
+  </head>
+  <body>
+    {% block body %}
+    <p>Hello, world!</p>
+    {% endblock body %}
+  </body>
+</html>
