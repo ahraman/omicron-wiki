@@ -8,6 +8,9 @@ pub enum Error {
     AssetName(PathBuf),
 
     #[error(transparent)]
+    Db(#[from] crate::db::Error),
+
+    #[error(transparent)]
     Io(#[from] std::io::Error),
     #[error(transparent)]
     Env(#[from] std::env::VarError),
@@ -19,9 +22,6 @@ pub enum Error {
 
     #[error(transparent)]
     Http(#[from] axum::http::Error),
-
-    #[error(transparent)]
-    Sqlx(#[from] sqlx::Error),
 }
 
 impl IntoResponse for Error {
