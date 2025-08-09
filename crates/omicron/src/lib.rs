@@ -1,6 +1,7 @@
 mod app;
 pub mod asset;
 pub mod controllers;
+pub mod core;
 pub mod db;
 mod error;
 pub mod render;

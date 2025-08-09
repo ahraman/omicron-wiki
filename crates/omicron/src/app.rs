@@ -2,25 +2,8 @@ use std::{ops::Deref, sync::Arc};
 
 use axum::extract::{FromRequestParts, State};
 
+pub use crate::core::app::Config;
 use crate::{Error, asset::AssetManager, db::DbManager, render::RenderManager};
-
-pub struct Config {
-    pub server_url: String,
-    pub database_url: String,
-
-    pub assets_dir: String,
-}
-
-impl Config {
-    pub fn from_env() -> Result<Self, Error> {
-        Ok(Self {
-            server_url: std::env::var("SERVER_URL")?,
-            database_url: std::env::var("DATABASE_URL")?,
-
-            assets_dir: std::env::var("ASSETS_DIR")?,
-        })
-    }
-}
 
 pub struct App {
     pub config: Config,
