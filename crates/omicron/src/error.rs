@@ -19,6 +19,9 @@ pub enum Error {
 
     #[error(transparent)]
     Http(#[from] axum::http::Error),
+
+    #[error(transparent)]
+    Sqlx(#[from] sqlx::Error),
 }
 
 impl IntoResponse for Error {

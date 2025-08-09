@@ -12,7 +12,7 @@ async fn main() -> Result<(), Error> {
     _ = dotenvy::dotenv()?;
 
     let config = Config::from_env()?;
-    let app = Arc::new(App::new(config)?);
+    let app = Arc::new(App::new(config).await?);
 
     let router = ServiceExt::<Request>::into_make_service_with_connect_info::<SocketAddr>(
         NormalizePathLayer::trim_trailing_slash().layer(build_router(app.clone())),
