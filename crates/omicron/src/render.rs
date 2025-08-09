@@ -47,8 +47,7 @@ fn register_tera_templates_recursive(tera: &mut Tera, dir: PathBuf) -> Result<()
             if path.extension().is_some_and(|ext| ext == "tera") {
                 let name = path
                     .file_stem()
-                    .map(OsStr::to_str)
-                    .flatten()
+                    .and_then(OsStr::to_str)
                     .ok_or(Error::AssetName(file.path()))?;
 
                 tera.add_template_file(file.path(), Some(name))?;

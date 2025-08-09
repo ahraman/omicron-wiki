@@ -50,7 +50,7 @@ pub enum ContentType {
 
 impl ContentType {
     pub fn from_extension(extension: Option<&OsStr>) -> Self {
-        match extension.map(OsStr::to_str).flatten() {
+        match extension.and_then(OsStr::to_str) {
             None => Self::Unknown,
             Some(extension) => match extension {
                 "txt" => Self::Text,

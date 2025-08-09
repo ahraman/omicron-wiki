@@ -26,6 +26,6 @@ pub enum Error {
 
 impl IntoResponse for Error {
     fn into_response(self) -> Response {
-        format!("{}", self).into_response()
+        format!("{self}").into_response()
     }
 }
